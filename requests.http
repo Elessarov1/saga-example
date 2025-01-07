@@ -1,0 +1,42 @@
+### make order
+POST http://localhost:8080/order
+Content-Type: application/json
+
+{
+  "username": "John",
+  "product" : "phone",
+  "cost": 1000
+}
+
+###pay the order
+POST http://localhost:8082/pay
+Content-Type: application/json
+
+{
+  "paymentId": 6,
+  "balance": 1000
+}
+
+
+### register connector
+POST http://localhost:8083/connectors
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "order-db-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "plugin.name": "pgoutput",
+    "snapshot.mode": "initial",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "postgres",
+    "database.password": "postgres",
+    "database.dbname": "order-db",
+    "database.server.name": "postgres",
+    "table.include.list": "public.orders"
+  }
+}
+### delete connector
+DELETE http://localhost:8083/connectors/order-db-connector

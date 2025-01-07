@@ -1,0 +1,42 @@
+server:
+  port: 8080
+
+order-service:
+  kafka:
+    bootstrap-servers: localhost:29092
+    group-id: order-service
+    payment-topic: payments
+    retries-count: 2
+    test-error-enabled: false
+  postgres:
+    host: localhost:5432
+    database: order-db
+    username: postgres
+    password: postgres
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: order-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+
+  datasource:
+    url: jdbc:postgresql://${order-service.postgres.host}/${order-service.postgres.database}?ApplicationName=${spring.application.name}
+    username: ${order-service.postgres.username}
+    password: ${order-service.postgres.password}
+    driverClassName: org.postgresql.Driver
+  jpa:
+    database: POSTGRESQL
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false

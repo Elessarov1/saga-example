@@ -1,0 +1,3 @@
+rootProject.name = 'saga-example'
+include 'order-service'
+include 'payment-service'
