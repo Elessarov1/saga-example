@@ -21,6 +21,7 @@ public class PaymentService {
     private final ObjectMapper objectMapper;
     private final KafkaProperties kafkaProperties;
 
+    @Transactional
     public String payTheOrder(final int id, final int amount) {
         var payment = paymentRepository.findById(id)
                 .stream()
